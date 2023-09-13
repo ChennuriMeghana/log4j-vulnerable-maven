@@ -1,0 +1,31 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script:
+    wget https://github.com/github/codeql-action/releases/download/codeql-bundle-20200826/codeql-runner-linux
+    chmod +x codeql-runner-linux
+  displayName: 'Get latest CodeQL package. Install on Agent.'
+- script:
+    ./codeql-runner-linux init
+    –repository CanarysPlayground/ScanGHfromAzDO
+    –github-auth $(GITHUB_PAT)
+    –config-file .github/codeql/codeql-config.yml
+  displayName: 'Initialize CodeQL Executable and create a CodeQL database'
+
+- script: |
+    ./codeql-runner-linux analyze
+    –repository CanarysPlayground/ScanGHfromAzDO
+    –github-url https://github.com
+    –github-auth $(GITHUB_PAT)
+    –commit $(BUILD_SOURCEVERSION)
+    –commit $(BUILD_SOURCEVERSION)
+  displayName: 'Populate the CodeQL runner databases, analyze them, and upload the results to GitHub'
