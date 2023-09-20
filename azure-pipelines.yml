@@ -4,28 +4,43 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
+- master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 steps:
-- script:
-    wget https://github.com/github/codeql-action/releases/download/codeql-bundle-20200826/codeql-runner-linux
-    chmod +x codeql-runner-linux
-  displayName: 'Get latest CodeQL package. Install on Agent.'
-- script:
-    ./codeql-runner-linux init
-    –repository CanarysPlayground/ScanGHfromAzDO
-    –github-auth $(GITHUB_PAT)
-    –config-file .github/codeql/codeql-config.yml
-  displayName: 'Initialize CodeQL Executable and create a CodeQL database'
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
 
 - script: |
-    ./codeql-runner-linux analyze
-    –repository CanarysPlayground/ScanGHfromAzDO
-    –github-url https://github.com
-    –github-auth $(GITHUB_PAT)
-    –commit $(BUILD_SOURCEVERSION)
-    –commit $(BUILD_SOURCEVERSION)
-  displayName: 'Populate the CodeQL runner databases, analyze them, and upload the results to GitHub'
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $currentBranch = "$(Build.SourceBranch)".Substring("refs/heads".Length + 1)
+      Write-Host "Current branch to push on GitHub is $currentBranch"
+    #git push https://$(GITHUB_PAT)@github.com/ChennuriMeghana/WebGoat.git "origin/$currentBranch`:$currentBranch" --force
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Write-Host "downloading Code QL analysis for windows"
+      $ProgressPreference = 'SilentlyContinue'
+      Invoke-WebRequest -uri https://github.com/github/codeql-action/releases/latest/download/codeql-runner-win.exe -OutFile $(Build.SourcesDirectory)\src\codeql-runner-win.exe
+      Write-Host "Code QL analysis for windows downloaded, now we init it"
+      cd $(Build.SourcesDirectory)\src
+      pwd 
+      & ./codeql-runner-win.exe init --github-url https://github.com --repository ChennuriMeghana/WebGoat --github-auth $(ghtoken) --languages javascript
+      
+      cat $(Build.SourcesDirectory)\src\codeql-runner\codeql-env.sh | Invoke-Expression
+      
+      
+      #perform CodeQL analysis
+      Write-Host "Analyzing with CodeQL"
+      & ./codeql-runner-win.exe analyze --github-url https://github.com --repository ChennuriMeghana/WebGoat --github-auth $(GITHUB_PAT)) --commit $(Build.SourceVersion) --ref $(Build.SourceBranch)
