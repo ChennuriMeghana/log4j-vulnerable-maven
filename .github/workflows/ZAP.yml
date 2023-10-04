@@ -29,4 +29,4 @@ jobs:
         auth.password_field="j_password" \
         auth.submit_field="submit" \
         auth.exclude=".*logout.*,http://url.com/somepath.*" \
-        auth.include="https://api.website.net.*"
+        auth.include="https://api.website.net.*""
