@@ -142,15 +142,19 @@ def json_to_csv_pandas(json_file, csv_file):
     logging.info("Findings converted from JSON file : " + json_file + " to CSV File: " + csv_file)
  
 def json_to_xlsx_pandas(json_file, xlsx_file):
- 
+
     df = json_to_df(json_file)
- 
-    # Write the DataFrame to CSV
-    # df.to_excel(xlsx_file, index=False)
- 
-    writer = pd.ExcelWriter(xlsx_file, engine='xlsxwriter', datetime_format="mmm d yyyy hh:mm")
-    df.to_excel(writer, sheet_name='Findings', index=False)
- 
+    
+    for column in df.columns:
+        # print (column, " : " , pd.api.types.is_datetime64_any_dtype(df[column]))
+        if pd.api.types.is_datetime64_any_dtype(df[column]):
+            df[column] = df[column].dt.tz_localize(None)
+            # print (column, " : removed TZ info" , pd.api.types.is_datetime64_any_dtype(df[column]))
+
+    
+    writer = pd.ExcelWriter(xlsx_file, engine='xlsxwriter', datetime_format="mmm d yyyy hh:mm") 
+    # writer = pd.ExcelWriter(xlsx_file, engine='xlsxwriter') 
+    df.to_excel(writer, sheet_name='Findings', index=False) 
     for column in df:
         column_width = max(df[column].astype(str).map(len).max(), len(column))
         col_idx = df.columns.get_loc(column)
