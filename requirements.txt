@@ -1,0 +1,7 @@
+requests
+pandas
+xlsxwriter
+fpdf
+datetime
+logging
+pdfkit
