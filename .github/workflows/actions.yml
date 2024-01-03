@@ -50,14 +50,14 @@ jobs:
         env:
           SEMGREP_API_WEB_TOKEN: ${{ secrets.SEMGREP_API_WEB_TOKEN }}
         run: |
-          python3 main.py -r "DigitalInnovation/Semgrep_POC_fesk-pdp"
+          python3 main.py -r "ChennuriMeghana/log4j-vulnerable-maven"
 
       - name: copy output.csv to $FILENAME.csv & output.html to $FILENAME.html & output.xlsx to $FILENAME.xlsx
         run: |
-          cp DigitalInnovation_Semgrep_POC_fesk_pdp.csv $FILENAME
-          cp DigitalInnovation_Semgrep_POC_fesk_pdp.html $FILENAMEHTML
-          cp DigitalInnovation_Semgrep_POC_fesk_pdp.xlsx $FILENAMEXLSX
-          cp DigitalInnovation_Semgrep_POC_fesk_pdp.pdf $FILENAMEPDF
+          cp ChennuriMeghana/log4j-vulnerable-maven.csv $FILENAME
+          cp ChennuriMeghana/log4j-vulnerable-maven.html $FILENAMEHTML
+          cp ChennuriMeghana/log4j-vulnerable-maven.xlsx $FILENAMEXLSX
+          cp ChennuriMeghana/log4j-vulnerable-maven.pdf $FILENAMEPDF
 
       - name: Upload findings as Artifact- CSV     
         uses: actions/upload-artifact@v3
