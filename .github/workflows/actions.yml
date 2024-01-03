@@ -54,10 +54,10 @@ jobs:
 
       - name: copy output.csv to $FILENAME.csv & output.html to $FILENAME.html & output.xlsx to $FILENAME.xlsx
         run: |
-          cp ChennuriMeghana/log4j-vulnerable-maven.csv $FILENAME
-          cp ChennuriMeghana/log4j-vulnerable-maven.html $FILENAMEHTML
-          cp ChennuriMeghana/log4j-vulnerable-maven.xlsx $FILENAMEXLSX
-          cp ChennuriMeghana/log4j-vulnerable-maven.pdf $FILENAMEPDF
+          cp ChennuriMeghana_log4j_vulnerable_maven.csv $FILENAME
+          cp ChennuriMeghana_log4j_vulnerable_maven.html $FILENAMEHTML
+          cp ChennuriMeghana_log4j_vulnerable_maven.xlsx $FILENAMEXLSX
+          cp ChennuriMeghana_log4j_vulnerable_maven.pdf $FILENAMEPDF
 
       - name: Upload findings as Artifact- CSV     
         uses: actions/upload-artifact@v3
